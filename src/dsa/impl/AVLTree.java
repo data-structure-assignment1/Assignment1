@@ -13,8 +13,9 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
    @Override
    public void insert( T element ) {
-	   if(tree==null)
-	   INode<T> node = find(root, element);
+	   INode<T> node = null;
+	if(root==null)
+	   node = find(root, element);
 	   expandExternal(node, element);
 	   restructure(node);
 
@@ -46,7 +47,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   }else {
 		   remove(node);
 	   }
-	   restructure(x);
+	   restructure(node);
    }
 
    private void restructure( INode<T> x ) {
@@ -58,7 +59,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			   INode<T> y = tallerChild(z);
 			   x=tallerChild(x);
 			   if (x.element().compareTo(y.element())>0&&y.element().compareTo(z.element())>0) {
-				leftRotation(x);//Viola
+				leftRotation(x);//Viol
 			   }else if (x.element().compareTo(y.element())<0&&y.element().compareTo(z.element())<0) {
 				rightRotation(x);//Sunny
 			   }else if (x.element().compareTo(y.element())>0&&y.element().compareTo(z.element())<0) {
