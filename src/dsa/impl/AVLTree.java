@@ -1,7 +1,6 @@
 package dsa.impl;
 
 import dsa.iface.INode;
-import dsa.impl.AbstractBinaryTree.BTNode;
 
 public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	public int height;
@@ -23,16 +22,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			   }
 		   }
 	   }
-		/**
-		 * Expand an external node - Store a value in the external node - Create two
-		 * external nodes as children, making {@code n} an internal node
-		 * 
-		 * @param n
-		 *            The node to expand. An exception will be thrown if it is not
-		 *            external.
-		 * @param e
-		 *            The element to be stored in node {@code n}.
-		 */
 
    private BTNode rightRotation(INode<T> x) {
 	   BTNode y = (BTNode) parent(x);
@@ -185,7 +174,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   return b;
 		
 	   }
-
    public int height(INode<T> node) {
 	 return height;
    }
@@ -204,7 +192,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			}
 		}
    }
-
 
    public INode<T> unbalanceNode(INode<T> node){
 	   if(node==root&&isBalanced(node)) {
@@ -251,11 +238,12 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
    }
    public void insert( T element ) {//insert the element to the AVLtree
 	   BTNode xINode= (BTNode)find(root, element);
-	   if (!isExternal(xINode)&&(xINode!=root)) {//Verify that the destination node does not exist
-		   return;
-	   }else {
+	   if (isExternal(xINode)) {//Verify that the destination node does not exist
+		   
 		   if(xINode==root) {//if root is null set the root element directly
 			   root.element=element;
+			   root.right=newNode(null, root);
+			   root.left=newNode(null, root);
 			   size=3;
 		   }else {
 			   replace(xINode, element);
@@ -277,12 +265,10 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   
    }
 
-   @Override
    public void remove( T element ) {
 	   BTNode node= (BTNode)find(root, element);
 	   if (!isExternal(node)) {//Verify that the destination node does not exist
-		   return;
-	   }else {
+		  
 		   if (isInternal(left(node))&&isInternal(right(node))) {
 			   INode<T> n=right(node);
 			   while(isInternal(left(n))) {
@@ -291,16 +277,19 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			 replace(node, n.element());
 			 remove(n);
 		   }else {
-			   remove(node);
+			 remove(node);
 		   }
-	   }
+	  
 	   size--;
-	   for(BTNode p = node.parent;p!=root;p=p.parent) {
-			if (!isBalanced(p)) {//Once the node is unbalanced, restructure it
-				   restructure(tallerChild(tallerChild(p)));
-				   break;
-			}
-			updateHeight(p);			
+	   		if(node!=root) {
+	   			for(BTNode p = node.parent;p!=root;p=p.parent) {
+	   				if (!isBalanced(p)) {//Once the node is unbalanced, restructure it
+	   					restructure(tallerChild(tallerChild(p)));
+	   				}
+	   				updateHeight(p);			
+	   			} 
+	   		}
+	   
 	   }
    }
 
@@ -320,26 +309,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			  doubleRotation2(x);
 		  }
 	  }
-		  
-
-/*	   if (unbalanceNode(x)==null) {
-		   			
-		}else {
-			   INode<T> z = unbalanceNode(x);
-			   INode<T> y = tallerChild(z);
-			   x=tallerChild(x);
-			   if (x.element().compareTo(y.element())>0&&y.element().compareTo(z.element())>0) {
-				leftRotation(x);//Viol
-			   }else if (x.element().compareTo(y.element())<0&&y.element().compareTo(z.element())<0) {
-				rightRotation(x);//Sunny
-			   }else if (x.element().compareTo(y.element())>0&&y.element().compareTo(z.element())<0) {
-				doubleRotation1(x);//Viola
-			   }else if (x.element().compareTo(y.element())<0&&y.element().compareTo(z.element())>0) {
-				doubleRotation2(x);//Sunny
-			   }
-			
-		}*/
-	   
 		
 	}
 }
