@@ -5,6 +5,8 @@ import dsa.util.TreePrinter;
 
 public class Main {
    public static void main(String[] args ) {
+		System.out.println("AVL TREE------------------------------------------------------");
+
 	      IBinarySearchTree<Integer> st1 = new AVLTree<Integer>();
 	      st1.insert( 15 );
 	      TreePrinter.printTree( st1);
@@ -12,15 +14,22 @@ public class Main {
 	      TreePrinter.printTree( st1);
 	      st1.insert( 5 );
 	      TreePrinter.printTree( st1);
-	     /* st1.remove( 15 );
+	     st1.remove( 15 );
+	      TreePrinter.printTree( st1);
+
 	      st1.contains( 10 );
+
+	      TreePrinter.printTree( st1);
 	      st1.contains( 30 );
-	      */st1.insert( 30 );
+
+	      TreePrinter.printTree( st1);
+	      st1.insert( 30 );
 	      TreePrinter.printTree( st1);
 	      st1.insert( 80 );
 	      TreePrinter.printTree( st1);
 	      st1.insert( 20 );
 	      TreePrinter.printTree( st1);
+			System.out.println("Splay TREE------------------------------------------------------");
 
       // Replace this with your code to test your implementations.
       // This just an example of one simple test for a Splay Tree.
