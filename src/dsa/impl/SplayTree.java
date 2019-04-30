@@ -21,23 +21,7 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		n.right=(BTNode) lChild;
 		l.parent=n;
 	}
-	private void updateHeight(INode<T> y) {
-			if(y==null) {		
-				height= 0;
-			}else {
-				if (!hasRight(y)&&!hasLeft(y)) {
-					height=1;
-					
-				}else if(!hasLeft(y)){
-					height=height(right(y));
-				}else if (!hasRight(y)) {
-					height=height(left(y));
-				}else {
-					height=1+Math.max(height(left(y)),height(right(y)));
 
-				}
-			}
-		}
 
 	private int height(INode<T> left) {
 		return height;
@@ -92,9 +76,6 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 						   AttachAsLChild(gg, x);
 					   }
 				   }
-				   updateHeight(x);
-				   updateHeight(y);
-				   updateHeight(z);
 			}
 			if(x.parent!=null) {
 				if (x.equals(right(x.parent))) {
@@ -135,7 +116,6 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
 				   }
 			 }
-			updateHeight(root);
 		}
 		
 		
@@ -143,10 +123,7 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	}
 	public INode<T> find( INode<T> node, T value ) {
 		   if(isExternal(node)) { 
-			   //Return the node if it is external.
-			   if (node!=root) {
-				   splay(parent(node));		  
-			   }
+			   
 			   return node;
 		   }else {
 			   	   //Compare the element of the node with 'value'.
@@ -157,16 +134,17 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 				   //If the value is greater than the node's element, recursively call this method to search the right sub-tree.				  
 				   return find(right(node), value);
 			   }else { 
-				   //If the value is equal to the node's element, we have found it! Return this node.
-				   splay(node);
+				  
 				   return node;
 			   }
 		   }
 	   }
     public boolean contains( T value ) {
     	   if (isInternal(find(root, value))) {
+    		   splay(find(root, value));
     		   return true;
     	   }else {
+    		   splay(find(root, value));
     		   return false;
     	   }
    }
