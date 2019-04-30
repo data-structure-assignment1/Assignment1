@@ -1,31 +1,26 @@
 package dsa.impl;
 
 import dsa.iface.INode;
+import dsa.impl.AbstractBinaryTree.BTNode;
 
 public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
 	
 	
-	public int height;
+	
+	public int height=0;
 	private void AttachAsRChild(INode<T> node,INode<T> rChild) {//set rChild as the rightchild of node
-		BTNode n=(BTNode) node;
-		BTNode r=(BTNode) rChild;
-
-		n.right=(BTNode) rChild;
-		r.parent=n;
+		
+		((BTNode) node).right=(BTNode) rChild;
+		((BTNode) rChild).parent=(BTNode) node;
 	}
 	private void AttachAsLChild(INode<T> node,INode<T> lChild) {//set lChild as the leftchild of node
-		BTNode n=(BTNode) node;
-		BTNode l=(BTNode) lChild;
-
-		n.right=(BTNode) lChild;
-		l.parent=n;
+		
+		((BTNode) node).right=(BTNode) lChild;
+		((BTNode) lChild).parent=(BTNode) node;
 	}
 
 
-	private int height(INode<T> left) {
-		return height;
-	}
 	private void splay( INode<T> n ) {
 		BTNode x=(BTNode) n;
 		INode<T> y = null;
@@ -68,7 +63,7 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 					  }
 				  }
 				   if(gg==null) {
-					   x.parent=null;
+					   root=x;
 				   }else {
 					   if(right(gg).equals(z)){
 						   AttachAsRChild(gg, x);
@@ -91,31 +86,19 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	}
 	public void insert( T value ) {
 		   BTNode xINode= (BTNode)find(root, value);
-		      System.out.println( xINode.element);
-
 		   if (isExternal(xINode)) {//Verify that the destination node does not exist
 			   if(xINode==root) {
-				   replace(root, value);
+				   root.element=value;
 				   root.right=newNode(null, root);
 				   root.left=newNode(null, root);
 				   size=3;
 			   }else {
-				   size+=2;
-				   BTNode t = root;
-				   if (root.element.compareTo(value)<0) {
-					   root=newNode(value, null);
-					   t.parent=root;
-						AttachAsLChild(root, t);
-
-						AttachAsRChild(root, right(t));
-				   }else {
-					   root=newNode(value, null);
-					   t.parent=root;
-					   AttachAsRChild(root, t);
-					   AttachAsLChild(root, left(t));
-
-				   }
-			 }
+				   replace(xINode, value);
+				   xINode.left=newNode(null, xINode);
+				   xINode.right=newNode(null, xINode); //Expand an external node create two external child size increase by2				
+				   size+=2;//it is possible that the height of parent changed the grandparent may be unbalanced			  
+				}
+			   splay(find(root, value));
 		}
 		
 		
