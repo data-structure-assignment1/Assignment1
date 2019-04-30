@@ -73,11 +73,15 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 				   }
 			}
 			if(x.parent!=null) {
+				y=parent(x);
 				if (x.equals(right(x.parent))) {
-					AttachAsRChild(y, left(x));
-					AttachAsLChild(x, y);
+					((BTNode)x).parent=(BTNode) parent(y);
+					AttachAsLChild(y, left(x));
+					AttachAsRChild(x, y);
+					
 				}else {
-					AttachAsLChild(y, right(x));
+					((BTNode)x).parent=(BTNode) parent(y);
+					AttachAsLChild(y, right(x));					
 					AttachAsRChild(x, y);
 				}
 			}
@@ -127,13 +131,52 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
     		   splay(find(root, value));
     		   return true;
     	   }else {
-    		   splay(find(root, value));
+    		   splay(((BTNode)find(root, value)).parent);
     		   return false;
     	   }
    }
 
-   public void remove( T value ) {
-	   BTNode node= (BTNode)find(root, value);
+	   public void remove(T value) {
+			BTNode node = (BTNode) find(root, value);
+			BTNode parent = node.parent;
+			if (node != root) {
+				if (isInternal(node)) {
+					if (node.right.element == null) {
+						node.parent.left = node.left;
+					} else if (node.left.element == null) {
+						root.parent.right = root.left;
+					} else {
+						INode<T> n = left(node);
+						while (right(n) != null) {
+							n = right(n);
+						}
+						node.element = n.element();
+						remove(n);
+					}
+					splay(parent);
+				} else {
+					splay(parent);
+				}
+			} else {
+				if (isInternal(node)) {
+					if (root.right.element == null) {
+						root = root.left;
+					} else if (root.left.element == null) {
+						root = root.right;
+					} else {
+						INode<T> n = left(node);
+						while (right(n) != null) {
+							n = right(n);
+						}
+						root.element = n.element();
+						remove(n);
+					}
+				}else {
+					root.element = value;
+				}
+			}
+		}
+/*	   BTNode node= (BTNode)find(root, value);
 
 	   if (root==null||isExternal(node)) {
 		   
@@ -159,6 +202,6 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			t.element=null;
 			t=null;
 			size--;
-	   }
+	   }*/
 	}
-}
+
