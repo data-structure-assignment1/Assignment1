@@ -3,7 +3,8 @@ package dsa.impl;
 import dsa.iface.INode;
 
 public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
-	public int height;
+	public int height=0;
+	
 	public INode<T> find( INode<T> node, T value ) {
 		   if(isExternal(node)) { 
 			   //Return the node if it is external.
@@ -174,18 +175,24 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   return b;
 		
 	   }
-   public int height(INode<T> node) {
-	 return height;
+   public int updateHeight(INode<T> node) {
+	 
+	 if (isExternal(node)) {
+		return height;
+	}else {
+		return height=1+Math.max(updateHeight(right(node)), updateHeight(left(node)));
+	}
+	 
    }
    public boolean isBalanced(INode<T> node) {
-	   if (height(left(node))>height(right(node))) {
-		   if ((height(left(node))-height(right(node)))<2) {
+	   if (updateHeight(left(node))>updateHeight(right(node))) {
+		   if ((updateHeight(left(node))-updateHeight(right(node)))<2) {
 			   return true;
 		   }else {
 			   return false;
 		   }
 	   }else {
-			if ((height(right(node))-height(left(node)))<2) {
+			if ((updateHeight(right(node))-updateHeight(left(node)))<2) {
 				return true;
 			}else {
 				return false;
@@ -204,19 +211,13 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   
    }
    
-   private void updateHeight(BTNode node) {
-		if(node==null) {		
-			height= 0;
-		}else {
-			height=1+Math.max(height(left(node)),height(right(node)));
-		}
-	}
+ 
 
    private INode<T> tallerChild(INode<T> x) {
-		if(height(left(x))>height(right(x))) { 
+		if(updateHeight(left(x))>updateHeight(right(x))) { 
 			return left(x);
 		
-		}else if(height(right(x))>height(left(x))) {
+		}else if(updateHeight(right(x))>updateHeight(left(x))) {
 			return right(x);
 		}else  {
 			if (isRoot(x)) {
