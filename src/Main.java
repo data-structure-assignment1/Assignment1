@@ -1,3 +1,4 @@
+
 import dsa.iface.IBinarySearchTree;
 import dsa.impl.AVLTree;
 import dsa.impl.SplayTree;
@@ -35,13 +36,29 @@ public class Main {
       // This just an example of one simple test for a Splay Tree.
       IBinarySearchTree<Integer> st2 = new SplayTree<Integer>();
       st2.insert( 10 );
+      TreePrinter.printTree( st2);
+
       st2.insert( 20 );
+      TreePrinter.printTree( st2);
+
       st2.insert( 40 );
+      TreePrinter.printTree( st2);
+
       st2.remove( 20 );
+      TreePrinter.printTree( st2);
+
       st2.contains( 10 );
+      TreePrinter.printTree( st2);
+
       st2.contains( 30 );
+      TreePrinter.printTree( st2);
+
       st2.insert( 30 );
+      TreePrinter.printTree( st2);
+
       st2.insert( 80 );
+      TreePrinter.printTree( st2);
+
       st2.insert( 20 );
       
       TreePrinter.printTree( st2);

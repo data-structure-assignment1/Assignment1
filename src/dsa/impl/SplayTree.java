@@ -1,12 +1,11 @@
 package dsa.impl;
 
-import javax.lang.model.element.Element;
-
 import dsa.iface.INode;
-import dsa.impl.AbstractBinaryTree.BTNode;
 
 public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 
+	
+	
 	public int height;
 	private void AttachAsRChild(INode<T> node,INode<T> rChild) {//set rChild as the rightchild of node
 		BTNode n=(BTNode) node;
@@ -26,9 +25,20 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			if(y==null) {		
 				height= 0;
 			}else {
-				height=1+Math.max(height(left(y)),height(right(y)));
+				if (!hasRight(y)&&!hasLeft(y)) {
+					height=1;
+					
+				}else if(!hasLeft(y)){
+					height=height(right(y));
+				}else if (!hasRight(y)) {
+					height=height(left(y));
+				}else {
+					height=1+Math.max(height(left(y)),height(right(y)));
+
+				}
 			}
 		}
+
 	private int height(INode<T> left) {
 		return height;
 	}
@@ -99,31 +109,31 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 		x.parent=null;
 	}
 	public void insert( T value ) {
-		if(root==null) {
-			replace(root, value);
-			root.right=newNode(null, root);
-			root.left=newNode(null, root);
-			size=3;
-		}else {
-			BTNode xINode= (BTNode)find(root, value);
-			if (!isExternal(xINode)) {//Verify that the destination node does not exist
-				   return;
-			}else {
-				size+=2;
-				BTNode t = root;
-				if (root.element.compareTo(value)<0) {
-					root=newNode(value, null);
-					t.parent=root;
-					AttachAsLChild(root, t);
+		   BTNode xINode= (BTNode)find(root, value);
+		      System.out.println( xINode.element);
 
-					AttachAsRChild(root, right(t));
-				}else {
-					root=newNode(value, null);
-					t.parent=root;
-					AttachAsRChild(root, t);
-					AttachAsLChild(root, left(t));
+		   if (isExternal(xINode)) {//Verify that the destination node does not exist
+			   if(xINode==root) {
+				   replace(root, value);
+				   root.right=newNode(null, root);
+				   root.left=newNode(null, root);
+				   size=3;
+			   }else {
+				   size+=2;
+				   BTNode t = root;
+				   if (root.element.compareTo(value)<0) {
+					   root=newNode(value, null);
+					   t.parent=root;
+						AttachAsLChild(root, t);
 
-				}
+						AttachAsRChild(root, right(t));
+				   }else {
+					   root=newNode(value, null);
+					   t.parent=root;
+					   AttachAsRChild(root, t);
+					   AttachAsLChild(root, left(t));
+
+				   }
 			 }
 			updateHeight(root);
 		}
@@ -134,9 +144,10 @@ public class SplayTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	public INode<T> find( INode<T> node, T value ) {
 		   if(isExternal(node)) { 
 			   //Return the node if it is external.
-			   splay(parent(node));
-
-			   return parent(node);
+			   if (node!=root) {
+				   splay(parent(node));		  
+			   }
+			   return node;
 		   }else {
 			   	   //Compare the element of the node with 'value'.
 			   if (value.compareTo(node.element())<0) { 

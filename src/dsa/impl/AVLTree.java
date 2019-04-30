@@ -209,6 +209,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			height= 0;
 		}else {
 			height=1+Math.max(height(left(node)),height(right(node)));
+			System.out.println("height"+height(left(node))+height(right(node)));
 		}
 	}
 
