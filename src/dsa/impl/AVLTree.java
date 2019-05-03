@@ -48,7 +48,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   if(T2!=root) {
 		   T2.parent=c;
 	   }
-	   c.right=T1;
+	   c.right=T3;
 	   if(T3!=root) {
 		   T3.parent=c;
 	   }
@@ -86,7 +86,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   if(T2!=root) {
 		   T2.parent=c;
 	   }
-	   c.right=T1;
+	   c.right=T3;
 	   if(T3!=root) {
 		   T3.parent=c;
 	   }
@@ -124,7 +124,7 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	   if(T2!=root) {
 		   T2.parent=c;
 	   }
-	   c.right=T1;
+	   c.right=T3;
 	   if(T3!=root) {
 		   T3.parent=c;
 	   }

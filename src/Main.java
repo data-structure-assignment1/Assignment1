@@ -1,11 +1,45 @@
 
+import java.awt.RenderingHints;
+import java.util.Stack;
+
 import dsa.iface.IBinarySearchTree;
+import dsa.iface.INode;
 import dsa.impl.AVLTree;
+import dsa.impl.BinarySearchTree;
 import dsa.impl.SplayTree;
 import dsa.util.TreePrinter;
 
 public class Main {
-   public static void main(String[] args ) {
+	BinarySearchTree<Integer> bst = new BinarySearchTree<Integer>();
+	public class test1<T extends Comparable<T>> extends BinarySearchTree<T>{
+
+		public  void goAlongLeftBranch(INode<T> node, Stack<INode<T>> stack) {
+			BTNode n=(BTNode)node;
+		   while(n!=null) {
+	 		  stack.push((INode<T>) n);
+	 		  n=n.right;
+	 	  }
+		}
+	   public void InorderTraversal (INode<T> node) {
+		   Stack<INode<T>> stack;
+		   BTNode n=(BTNode)node;
+		   while(node==null){
+			   goAlongLeftBranch(node, stack);
+			   if (stack.empty()) {
+				break;
+			   }
+			   node = stack.pop();
+			   store(node.element());
+			   n=n.right;
+		   }
+	   }
+	}
+
+private void store(T element) {
+	// TODO Auto-generated method stub
+	
+}
+public static void main(String[] args ) {
 		System.out.println("AVL TREE------------------------------------------------------");
 
 	      IBinarySearchTree<Integer> st1 = new AVLTree<Integer>();
@@ -30,6 +64,11 @@ public class Main {
 	      TreePrinter.printTree( st1);
 	      st1.insert( 20 );
 	      TreePrinter.printTree( st1);
+			System.out.println("Compare with the BinaryResearchTree------------------------------------------------------");
+
+	      
+	      
+	      
 			System.out.println("Splay TREE------------------------------------------------------");
 
       // Replace this with your code to test your implementations.
