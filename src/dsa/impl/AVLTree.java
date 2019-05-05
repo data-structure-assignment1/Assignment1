@@ -4,177 +4,42 @@ import dsa.iface.INode;
 
 public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	public int height=0;
-	
+	public int size=0;
 	public INode<T> find( INode<T> node, T value ) {
-		   if(isExternal(node)) { 
-			   //Return the node if it is external.
+		   if(isExternal(node)) {  //Return the node if it is external.
 			   return node;
-		   }else {
-			   	   //Compare the element of the node with 'value'.
-			   if (value.compareTo(node.element())<0) { 
-				   //If the value is less than the node's element, recursively call this method to search the left sub-tree.
+		   }else {//Compare the element of the node with 'value'.
+			   if (value.compareTo(node.element())<0) { //If the value is less than the node's element, recursively call this method to search the left sub-tree.
 				   return find(left(node), value);
-			   }else if (value.compareTo(node.element())>0) {
-				   //If the value is greater than the node's element, recursively call this method to search the right sub-tree.				  
+			   }else if (value.compareTo(node.element())>0) {//If the value is greater than the node's element, recursively call this method to search the right sub-tree.				  
 				   return find(right(node), value);
-			   }else { 
-				   //If the value is equal to the node's element, we have found it! Return this node.
+			   }else {//If the value is equal to the node's element, we have found it! Return this node.
 				   return node;
 			   }
 		   }
 	   }
-
-   private BTNode rightRotation(INode<T> x) {
-	   BTNode y = (BTNode) parent(x);
-	   BTNode z = (BTNode) parent(y);
-	   BTNode a = (BTNode) x;
-	   BTNode b = (BTNode) y;
-	   BTNode c = (BTNode) z;
-
-	   BTNode T0 = (BTNode) left(x);
-	   BTNode T1 = (BTNode) right(x);
-	   BTNode T2 = (BTNode) right(y);
-	   BTNode T3 = (BTNode) right(z);
-	   a.left=T0;
+   public void rotation(INode<T> a,INode<T> b,INode<T> c,INode<T> T0,INode<T> T1,INode<T> T2,INode<T> T3) {
+	   ((BTNode)a).left=(BTNode) T0;
 	   if(T0!=root) {
-		   T0.parent=a;
+		   ((BTNode)T0).parent=(BTNode) a;
 	   }
-	   a.right=T1;
+	   ((BTNode)a).right=(BTNode) T1;
 	   if(T1!=root) {
-		   T1.parent=a;
+		   ((BTNode)T1).parent=(BTNode) a;
 	   }
-	   updateHeight(a);
-	   c.left=T2;
+	   ((BTNode)c).left=(BTNode) T2;
 	   if(T2!=root) {
-		   T2.parent=c;
+		   ((BTNode)T2).parent=(BTNode) c;
 	   }
-	   c.right=T3;
+	   ((BTNode)c).right=(BTNode) T1;
 	   if(T3!=root) {
-		   T3.parent=c;
+		   ((BTNode)T3).parent=(BTNode) c;
 	   }
-	   updateHeight(c);
-	   b.left=a;
-	   a.parent=b;
-	   b.right=c;
-	   c.parent=b;
-
-	   updateHeight(b);
-	   return b;
-	
+	   ((BTNode)b).left=(BTNode) a;
+	   ((BTNode)a).parent=(BTNode) b;
+	   ((BTNode)b).right=(BTNode)c;
+	   ((BTNode)c).parent=(BTNode)b;
    }
-   private BTNode leftRotation(INode<T> x) {
-	   BTNode y = (BTNode) parent(x);
-	   BTNode z = (BTNode) parent(y);
-	   BTNode a = (BTNode) z;
-	   BTNode b = (BTNode) y;
-	   BTNode c = (BTNode) x;
-
-	   BTNode T0 = (BTNode) left(z);
-	   BTNode T1 = (BTNode) left(y);
-	   BTNode T2 = (BTNode) left(x);
-	   BTNode T3 = (BTNode) right(x);
-	   a.left=T0;
-	   if(T0!=root) {
-		   T0.parent=a;
-	   }
-	   a.right=T1;
-	   if(T1!=root) {
-		   T1.parent=a;
-	   }
-	   updateHeight(a);
-	   c.left=T2;
-	   if(T2!=root) {
-		   T2.parent=c;
-	   }
-	   c.right=T3;
-	   if(T3!=root) {
-		   T3.parent=c;
-	   }
-	   updateHeight(c);
-	   b.left=a;
-	   a.parent=b;
-	   b.right=c;
-	   c.parent=b;
-
-	   updateHeight(b);
-	   return b;
-   }
- 
-   private BTNode doubleRotation1(INode<T> x) {//zig-zag
-	   BTNode y = (BTNode) parent(x);
-	   BTNode z = (BTNode) parent(y);
-	   BTNode a = (BTNode) y;
-	   BTNode b = (BTNode) x;
-	   BTNode c = (BTNode) z;
-
-	   BTNode T0 = (BTNode) left(y);
-	   BTNode T1 = (BTNode) left(x);
-	   BTNode T2 = (BTNode) right(x);
-	   BTNode T3 = (BTNode) right(z);
-	   a.left=T0;
-	   if(T0!=root) {
-		   T0.parent=a;
-	   }
-	   a.right=T1;
-	   if(T1!=root) {
-		   T1.parent=a;
-	   }
-	   updateHeight(a);
-	   c.left=T2;
-	   if(T2!=root) {
-		   T2.parent=c;
-	   }
-	   c.right=T3;
-	   if(T3!=root) {
-		   T3.parent=c;
-	   }
-	   updateHeight(c);
-	   b.left=a;
-	   a.parent=b;
-	   b.right=c;
-	   c.parent=b;
-
-	   updateHeight(b);
-	   return b;		
-	}
-   private BTNode doubleRotation2(INode<T> x) {//zag-zig
-	   BTNode y = (BTNode) parent(x);
-	   BTNode z = (BTNode) parent(y);
-	   BTNode a = (BTNode) z;
-	   BTNode b = (BTNode) x;
-	   BTNode c = (BTNode) y;
-
-	   BTNode T0 = (BTNode) left(z);
-	   BTNode T1 = (BTNode) left(x);
-	   BTNode T2 = (BTNode) right(x);
-	   BTNode T3 = (BTNode) right(y);
-	   a.left=T0;
-	   if(T0!=root) {
-		   T0.parent=a;
-	   }
-	   a.right=T1;
-	   if(T1!=root) {
-		   T1.parent=a;
-	   }
-	   updateHeight(a);
-	   c.left=T2;
-	   if(T2!=root) {
-		   T2.parent=c;
-	   }
-	   c.right=T1;
-	   if(T3!=root) {
-		   T3.parent=c;
-	   }
-	   updateHeight(c);
-	   b.left=a;
-	   a.parent=b;
-	   b.right=c;
-	   c.parent=b;
-
-	   updateHeight(b);
-	   return b;
-		
-	   }
    public int updateHeight(INode<T> node) {
 	 
 	 if (isExternal(node)) {
@@ -210,9 +75,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 	}
 	   
    }
-   
- 
-
    private INode<T> tallerChild(INode<T> x) {
 		if(updateHeight(left(x))>updateHeight(right(x))) { 
 			return left(x);
@@ -228,7 +90,6 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 				return right(x);
 			}
 		}
-
 	}
    public boolean contains( T element ) {
 	   if (isInternal(find(root, element))) {
@@ -251,19 +112,15 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			   xINode.left=newNode(null, xINode);
 			   xINode.right=newNode(null, xINode); //Expand an external node create two external child size increase by2				
 			   size+=2;//it is possible that the height of parent changed the grandparent may be unbalanced			  
-			   for(BTNode p = xINode.parent;p!=root;p=p.parent) {
+			   ///
+					   for(BTNode p = xINode.parent;p!=root;p=p.parent) {
 					if (!isBalanced(p)) {//Once the node is unbalanced, restructure it
 						   restructure(tallerChild(tallerChild(p)));
 						   break;
-					}
-					updateHeight(p);//update the height of the node 
-					//note even if the tree is balance, the height of p is possible changed
+					}//note even if the tree is balance, the height of p is possible changed
 				}
 			}
-		}
-	   
-
-	   
+		}	   	   
    }
 
    public void remove( T element ) {
@@ -279,38 +136,34 @@ public class AVLTree<T extends Comparable<T>> extends BinarySearchTree<T> {
 			 remove(n);
 		   }else {
 			 remove(node);
-		   }
-	  
+		   }	  
 	   size--;
 	   		if(node!=root) {
 	   			for(BTNode p = node.parent;p!=root;p=p.parent) {
 	   				if (!isBalanced(p)) {//Once the node is unbalanced, restructure it
 	   					restructure(tallerChild(tallerChild(p)));
 	   				}
-	   				updateHeight(p);			
 	   			} 
 	   		}
 	   
 	   }
    }
-
    private void restructure( INode<T> x ) {
 	   BTNode y=(BTNode) parent(x); 
 	   BTNode z= (BTNode) parent(y);
 	   if(y.equals(left(z))) {
 		   if (x.equals(left(y))) {
-			rightRotation(x);
+			rotation(x, y, z, left(x), right(x), right(y), right(z));
 		   }else {
-			doubleRotation1(x);
+				rotation(y, x, z, left(y), left(x), right(x), right(z));
 		   }
 	  }else {
 		  if(x.equals(right(y))) {
-			  leftRotation(x);
+				rotation(z, y, x, left(z), left(y), left(x), right(x));
 		  }else {
-			  doubleRotation2(x);
+				rotation(z, x, y, left(z), left(x), right(x), right(y));
 		  }
-	  }
-		
+	  }		
 	}
 }
 
